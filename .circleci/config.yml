@@ -49,8 +49,6 @@ jobs:
     docker:
         - image: quay.io/helmpack/chart-testing:v3.5.0
     steps:
-      - attach_workspace:
-          at: /tmp/workspace
       - checkout:
           path: ~/crypto-rates
       - run: 
