@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-eks: circleci/aws-eks@2.1.2
+  trivy: signavio/trivy@1.3.0
   helm: circleci/helm@1.0
   
 jobs:
@@ -24,6 +24,7 @@ jobs:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
+
       - setup_remote_docker:
           version: 20.10.14
       - checkout
@@ -36,6 +37,15 @@ jobs:
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             docker push $IMAGE_NAME:$TAG 
             docker push $IMAGE_NAME:latest 
+      - run:
+          name: Install trivy
+          command: |
+            apk add --update-cache --upgrade curl
+            curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+      - run:
+          name: Scan the local image with trivy
+          command: trivy --exit-code 0 --no-progress $IMAGE_NAME:$TAG
+
   packageHelm:
     docker:
         - image: circleci/golang:1.10
@@ -46,9 +56,6 @@ jobs:
       - run:
           name: Install and configuire helm
           command: sudo curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz | tar xz && sudo mv linux-amd64/helm /bin/helm && sudo rm -rf linux-amd64
-      - run:
-          name: Initialize helm
-          command:  helm init --client-only --kubeconfig=$HOME/.kube/kubeconfig
 
 workflows:
   build_and_package_workflow:
@@ -57,4 +64,7 @@ workflows:
       - build-push-Image:
           requires:
             - build-test
+      - packageHelm:
+          requires:
+            - build-push-Image
 
