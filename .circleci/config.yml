@@ -53,6 +53,7 @@ jobs:
       - run:
           name: Package and Deploy helm charts
           command: |
+            cd crypto-rates
             helm package $CIRCLE_PROJECT_REPONAME
 
 workflows:
