@@ -32,7 +32,7 @@ jobs:
           name: Build and push application Docker image
           command: |
             TAG=0.1.$CIRCLE_BUILD_NUM
-            docker build --cache-from=app -t $IMAGE_NAME:$TAG .
+            docker build -t $IMAGE_NAME:$TAG .
             docker tag $IMAGE_NAME $IMAGE_NAME:latest
             echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
             docker push IMAGE_NAME:$TAG 
