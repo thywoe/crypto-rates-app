@@ -17,7 +17,9 @@ jobs:
           command: pip install -r requirements.txt
       - run:
           name: run tests
-          command: python -m pytest test.py
+          command: |
+            pip install pytest
+            python -m pytest test.py
   build-push-Image:
     docker:
       - image: docker:17.05.0-ce-git
