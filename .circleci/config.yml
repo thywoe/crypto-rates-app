@@ -8,7 +8,7 @@ IMAGE_NAME: docker.io/thywoe/crypto-rates
 jobs:
   build-test:
     docker:
-      - image: cimg/python:3.9.13
+      - image: cimg/python:3.9-slim-bullseye
     steps:
       - checkout
       - run: python --version
