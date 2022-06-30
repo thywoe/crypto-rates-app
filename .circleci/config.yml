@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  helm: banzaicloud/helm@0.0.8
+  helm: circleci/helm@1.0
   
 jobs:
   build-test:
