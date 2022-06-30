@@ -2,9 +2,7 @@ version: 2.1
 orbs:
   aws-eks: circleci/aws-eks@2.1.2
   helm: circleci/helm@1.0
-
-IMAGE_NAME: docker.io/thywoe/crypto-rates 
- 
+  
 jobs:
   build-test:
     docker:
@@ -21,13 +19,14 @@ jobs:
             pip install pytest
             python -m pytest test.py
   build-push-Image:
+    environment:
+      IMAGE_NAME: docker.io/thywoe/crypto-rates
     docker:
       - image: docker:17.05.0-ce-git
     steps:
       - setup_remote_docker:
           version: 20.10.14
       - checkout
-
       - run:
           name: Build and push application Docker image
           command: |
