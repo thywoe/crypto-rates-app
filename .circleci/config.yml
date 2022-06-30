@@ -46,6 +46,8 @@ jobs:
           command: trivy image --exit-code 1 --severity HIGH,CRITICAL -f table $IMAGE_NAME:$TAG
 
   packageHelm:
+    executor: <<parameters.executor>>
+    resource_class: small
     parameters:
       charts-dir:
         default: crypto-rates
