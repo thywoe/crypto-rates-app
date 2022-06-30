@@ -45,48 +45,48 @@ jobs:
           name: Scan the local image with trivy
           command: trivy image --exit-code 1 --severity HIGH,CRITICAL -f table $IMAGE_NAME:$TAG
 
-  packageHelm:
-    executor: <<parameters.executor>>
-    resource_class: small
-    parameters:
-      charts-dir:
-        default: crypto-rates
-        description: Path of helm chart(s)
-        type: string
-      add-extra-repositories:
-        default: [https://thywoe.github.io/crypto-rates-app/]
-        description: Steps to add extra repositories
-        type: steps
-      tgz-dir:
-        default: /workspace/tgz
-        description: Directory of chart tgz
-        type: string
-      skip-dependency-update:
-        type: boolean
-        default: false
-      executor:
-        default: helm3
-        description: Executor to use
-        type: executor
+  # packageHelm:
+  #   executor: <<parameters.executor>>
+  #   resource_class: small
+  #   parameters:
+  #     charts-dir:
+  #       default: crypto-rates
+  #       description: Path of helm chart(s)
+  #       type: string
+  #     add-extra-repositories:
+  #       default: [https://thywoe.github.io/crypto-rates-app/]
+  #       description: Steps to add extra repositories
+  #       type: steps
+  #     tgz-dir:
+  #       default: /workspace/tgz
+  #       description: Directory of chart tgz
+  #       type: string
+  #     skip-dependency-update:
+  #       type: boolean
+  #       default: false
+  #     executor:
+  #       default: helm3
+  #       description: Executor to use
+  #       type: executor
 
-    steps:
-      - checkout
-      - setup-repositories:
-          add-extra-repositories: << parameters.add-extra-repositories >>
-      - check-parameters:
-          charts-dir: << parameters.charts-dir >>
-      - unless:
-          condition: << parameters.skip-dependency-update >>
-          steps:
-            - update-dependencies:
-                charts-dir: << parameters.charts-dir >>
-      - lint:
-          charts-dir: << parameters.charts-dir >>
-      - build:
-          charts-dir: << parameters.charts-dir >>
-          tgz-dir: <<parameters.tgz-dir >>
-      - publish:
-          tgz-dir: <<parameters.tgz-dir >>
+  #   steps:
+  #     - checkout
+  #     - setup-repositories:
+  #         add-extra-repositories: << parameters.add-extra-repositories >>
+  #     - check-parameters:
+  #         charts-dir: << parameters.charts-dir >>
+  #     - unless:
+  #         condition: << parameters.skip-dependency-update >>
+  #         steps:
+  #           - update-dependencies:
+  #               charts-dir: << parameters.charts-dir >>
+  #     - lint:
+  #         charts-dir: << parameters.charts-dir >>
+  #     - build:
+  #         charts-dir: << parameters.charts-dir >>
+  #         tgz-dir: <<parameters.tgz-dir >>
+  #     - publish:
+  #         tgz-dir: <<parameters.tgz-dir >>
     # docker:
     #     - image: alpine/helm:latest
     # steps:
@@ -105,6 +105,11 @@ workflows:
       - build-push-scan-Image:
           requires:
             - build-test
-      - packageHelm
+      # - packageHelm
+      - helm/publish-chart:
+          context: helm
+          charts-dir: crypto-rates
+          add-extra-repositories:
+            - run: "helm repo add extra \thttps://thywoe.github.io/crypto-rates-app"
           # requires:
           #   - build-push-scan-Image
