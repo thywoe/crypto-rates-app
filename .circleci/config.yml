@@ -52,7 +52,7 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - checkout
-      - run: test helm chart
+      - run: 
           name: test helm chart
           command: ct install --chart-dirs crypto-rates --charts .
       - run:
