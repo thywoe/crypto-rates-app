@@ -47,7 +47,7 @@ jobs:
 
   packageHelm:
     docker:
-        - image: circleci/golang:1.10
+        - image: alpine/helm:latest
     steps:
       - attach_workspace:
           at: /tmp/workspace
@@ -55,8 +55,7 @@ jobs:
       - run:
           name: Install and configuire helm
           command: |
-            sudo curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
-            && sudo ./get_helm.sh
+            helm package crypto-rates
 
 workflows:
   build_and_package_workflow:
