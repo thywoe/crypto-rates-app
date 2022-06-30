@@ -53,7 +53,9 @@ jobs:
           path: ~/crypto-rates
       - run: 
           name: test helm chart
-          command: ct install --chart-dirs . --charts .
+          command: |
+            ls -a
+            ct install --chart-dirs . --charts .
       - run:
           name: Install and configuire helm
           command: |
