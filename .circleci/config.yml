@@ -47,15 +47,18 @@ jobs:
 
   packageHelm:
     docker:
-        - image: alpine/helm:latest
+        - image: quay.io/helmpack/chart-testing:v3.5.0
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - checkout
+      - run: test helm chart
+          name: test helm chart
+          command: ct install --chart-dirs crypto-rates --charts .
       - run:
           name: Install and configuire helm
           command: |
-            helm package crypto-rates
+            helm package $CIRCLE_PROJECT_REPONAME
 
 workflows:
   build_and_package_workflow:
