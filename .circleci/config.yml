@@ -54,6 +54,8 @@ jobs:
           name: Package and Deploy helm charts
           command: |
             helm package crypto-rates
+            helm repo add https://thywoe.github.io/crypto-rates-app/
+
 
 workflows:
   build_and_package_workflow:
