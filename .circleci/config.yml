@@ -47,16 +47,11 @@ jobs:
 
   packageHelm:
     docker:
-        - image: quay.io/helmpack/chart-testing:v3.5.0
+        - image: alpine/helm:latest
     steps:
       - checkout
-      - run: 
-          name: test helm chart
-          command: |
-            cd crypto-rates
-            ct install --chart-dirs . --charts .
       - run:
-          name: Install and configuire helm
+          name: Package and Deploy helm charts
           command: |
             helm package $CIRCLE_PROJECT_REPONAME
 
