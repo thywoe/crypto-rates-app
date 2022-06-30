@@ -45,7 +45,7 @@ jobs:
           name: Scan the local image with trivy
           command: trivy image --exit-code 1 --severity HIGH,CRITICAL -f table $IMAGE_NAME:$TAG
 
-  # packageHelm:
+  packageHelm:
     docker:
         - image: alpine/helm:latest
     steps:
@@ -64,11 +64,11 @@ workflows:
       - build-push-scan-Image:
           requires:
             - build-test
-      # - packageHelm
-      - helm/publish-chart:
-          context: helm
-          charts-dir: crypto-rates
-          add-extra-repositories:
-            - run: "helm repo add extra \thttps://thywoe.github.io/crypto-rates-app"
+      - packageHelm
+      # - helm/publish-chart:
+      #     context: helm
+      #     charts-dir: crypto-rates
+      #     add-extra-repositories:
+      #       - run: "helm repo add extra \thttps://thywoe.github.io/crypto-rates-app"
           # requires:
           #   - build-push-scan-Image
