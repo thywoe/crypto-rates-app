@@ -53,6 +53,7 @@ jobs:
       - run:
           name: Package and Deploy helm charts
           command: |
+            helm repo add chartmuseum http://localhost:8080
             helm plugin install https://github.com/chartmuseum/helm-push
             # helm package crypto-rates
             # #helm repo add https://thywoe.github.io/crypto-rates-app/
