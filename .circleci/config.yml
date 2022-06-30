@@ -54,10 +54,11 @@ jobs:
           name: Package and Deploy helm charts
           command: |
             helm plugin install https://github.com/chartmuseum/helm-push
-            helm package crypto-rates
-            #helm repo add https://thywoe.github.io/crypto-rates-app/
-            helm repo add --username $DOCKER_USER --password  $DOCKER_PASS project-1 https://thywoe.github.io/crypto-rates-app/
-            helm cm-push crypto-rates-0.1.0.tgz project-1
+            # helm package crypto-rates
+            # #helm repo add https://thywoe.github.io/crypto-rates-app/
+            # helm repo add --username $DOCKER_USER --password  $DOCKER_PASS project-1 https://thywoe.github.io/crypto-rates-app/
+            # helm cm-push crypto-rates-0.1.0.tgz project-1
+            helm cm-push crypto-rates/ chartmuseum
             
 
 workflows:
