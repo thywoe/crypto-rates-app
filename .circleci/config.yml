@@ -17,7 +17,7 @@ jobs:
           command: |
             pip install pytest
             python -m pytest test.py
-  build-push-Image:
+  build-push-scan-Image:
     environment:
       IMAGE_NAME: docker.io/thywoe/crypto-rates
     docker:
@@ -60,10 +60,10 @@ workflows:
   build_and_package_workflow:
     jobs:
       - build-test
-      - build-push-Image:
+      - build-push-scan-Image:
           requires:
             - build-test
       - packageHelm:
           requires:
-            - build-push-Image
+            - build-push-scan-Image
 
