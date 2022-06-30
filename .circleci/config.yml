@@ -6,7 +6,7 @@ orbs:
 IMAGE_NAME: docker.io/thywoe/crypto-rates 
  
 jobs:
-  build&test:
+  build-test:
     docker:
       - image: cimg/python:3.9.13
     steps:
@@ -18,7 +18,7 @@ jobs:
       - run:
           name: run tests
           command: python python3 -m pytest test.py
-  build&pushImage:
+  build-push-Image:
     docker:
       - image: docker:17.05.0-ce-git
     steps:
@@ -52,7 +52,7 @@ jobs:
 workflows:
   build_and_package_workflow:
     jobs:
-      - build&test
-      - build&pushImage:
+      - build-test
+      - build-push-Image:
           requires:
-            - build&test
+            - build-test
