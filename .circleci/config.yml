@@ -63,7 +63,7 @@ workflows:
       - build-push-scan-Image:
           requires:
             - build-test
-      - packageHelm:
+      - packageHelm
           # requires:
           #   - build-push-scan-Image
 
