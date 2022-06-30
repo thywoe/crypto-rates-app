@@ -56,7 +56,7 @@ jobs:
           name: Install and configuire helm
           command: |
             sudo curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
-            && chmod +x get_helm.sh && ./get_helm.sh
+            && sudo ./get_helm.sh
 
 workflows:
   build_and_package_workflow:
