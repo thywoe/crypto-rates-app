@@ -1,0 +1,58 @@
+version: 2.1
+orbs:
+  aws-eks: circleci/aws-eks@2.1.2
+  helm: circleci/helm@1.0
+
+IMAGE_NAME: docker.io/thywoe/crypto-rates 
+ 
+jobs:
+  build&test:
+    docker:
+      - image: cimg/python:3.9.13
+    steps:
+      - checkout
+      - run: python --version
+      - run:
+          name: install dependencies
+          command: pip install -r requirements.txt
+      - run:
+          name: run tests
+          command: python python3 -m pytest test.py
+  build&pushImage:
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - setup_remote_docker:
+          version: 20.10.14
+      - checkout
+
+      - run:
+          name: Build and push application Docker image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker build --cache-from=app -t $IMAGE_NAME:$TAG .
+            docker tag $IMAGE_NAME $IMAGE_NAME:latest
+            echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+            docker push IMAGE_NAME:$TAG 
+            docker push IMAGE_NAME:latest 
+  packageHelm:
+    docker:
+        - image: circleci/golang:1.10
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - checkout
+      - run:
+          name: Install and configuire helm
+          command: sudo curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz | tar xz && sudo mv linux-amd64/helm /bin/helm && sudo rm -rf linux-amd64
+      - run:
+          name: Initialize helm
+          command:  helm init --client-only --kubeconfig=$HOME/.kube/kubeconfig
+
+workflows:
+  build_and_package_workflow:
+    jobs:
+      - build&test
+      - build&pushImage:
+          requires:
+            - build&test

@@ -8,7 +8,7 @@ image:
   repository: docker.io/thywoe/crypto-rates
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "06302022"
+  tag: "latest"
 
 imagePullSecrets: []
 nameOverride: ""
