@@ -7,7 +7,10 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip3 install -r requirements.txt
+# RUN pip install -r requirements.txt
+RUN set -ex \
+    && pip install --upgrade pip \
+    && pip install --no-cache-dir -r /app/requirements.txt
 
 COPY  --chown=python:python . .
 
@@ -15,5 +18,6 @@ RUN chmod +x gunicorn.sh
 
 USER 999
 
-# CMD [ "python", "app.py" ]
+EXPOSE 5000
+
 ENTRYPOINT ["./gunicorn.sh"]
