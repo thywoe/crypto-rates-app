@@ -41,25 +41,25 @@ jobs:
           command: |
             apk add --update-cache --upgrade curl
             curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
-      - run:
-          name: Scan the local image with trivy
-          command: trivy image --exit-code 1 --severity HIGH,CRITICAL -f table $IMAGE_NAME:$TAG
+      # - run:
+      #     name: Scan the local image with trivy
+      #     command: trivy image --exit-code 1 --severity HIGH,CRITICAL -f table $IMAGE_NAME:$TAG
 
-  packageHelm:
-    docker:
-        - image: alpine/helm:latest
-    steps:
-      - checkout
-      - run:
-          name: Package and Deploy helm charts
-          command: |
-            helm repo add chartmuseum http://localhost:8080
-            helm plugin install https://github.com/chartmuseum/helm-push
-            # helm package crypto-rates
-            # #helm repo add https://thywoe.github.io/crypto-rates-app/
-            # helm repo add --username $DOCKER_USER --password  $DOCKER_PASS project-1 https://thywoe.github.io/crypto-rates-app/
-            # helm cm-push crypto-rates-0.1.0.tgz project-1
-            helm cm-push crypto-rates/ chartmuseum
+  # packageHelm:
+  #   docker:
+  #       - image: alpine/helm:latest
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Package and Deploy helm charts
+  #         command: |
+  #           helm repo add chartmuseum http://localhost:8080
+  #           helm plugin install https://github.com/chartmuseum/helm-push
+  #           # helm package crypto-rates
+  #           # #helm repo add https://thywoe.github.io/crypto-rates-app/
+  #           # helm repo add --username $DOCKER_USER --password  $DOCKER_PASS project-1 https://thywoe.github.io/crypto-rates-app/
+  #           # helm cm-push crypto-rates-0.1.0.tgz project-1
+  #           helm cm-push crypto-rates/ chartmuseum
             
 
 workflows:
@@ -69,7 +69,7 @@ workflows:
       - build-push-scan-Image:
           requires:
             - build-test
-      - packageHelm
+      # - packageHelm
       # - helm/publish-chart:
       #     context: helm
       #     charts-dir: crypto-rates
