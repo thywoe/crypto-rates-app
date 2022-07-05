@@ -15,7 +15,6 @@ jobs:
       - run:
           name: run tests
           command: |
-            pip install pytest
             python -m pytest test.py
   build-push-scan-Image:
     environment:
